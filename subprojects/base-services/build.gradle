@@ -13,6 +13,9 @@ shadowJar {
     exclude '**/*package-info.class'
     
     exclude 'org/gradle/internal/classloader/ClasspathUtil*'
+    exclude 'org/gradle/api/JavaVersion*'
+    exclude 'org/gradle/internal/jvm/Jvm*'
+    exclude 'org/gradle/internal/os/OperatingSystem*'
 
     archiveFileName.set("${project.name}.jar")
 }
