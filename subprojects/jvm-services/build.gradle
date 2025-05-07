@@ -1,11 +1,24 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'com.diffplug.spotless' version '7.0.3'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 tasks.assemble.dependsOn tasks.shadowJar
 tasks.build.dependsOn tasks.shadowJar
+
+spotless {
+    java {
+        target "**/*.java"
+        googleJavaFormat()
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 shadowJar {
     exclude '**/*-classpath.properties'
