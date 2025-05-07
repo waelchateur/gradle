@@ -51,20 +51,7 @@ dependencies {
    
     implementation("org.slf4j:slf4j-api:1.7.30")
     
-    implementation("net.rubygrapefruit:native-platform:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-freebsd-amd64-libcpp:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-linux-aarch64:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-linux-amd64:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-osx-aarch64:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-osx-amd64:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-windows-amd64:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-windows-amd64-min:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-windows-i386:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-windows-i386-min:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-linux-aarch64-ncurses5:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-linux-aarch64-ncurses6:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-linux-amd64-ncurses5:0.22-milestone-23")
-    implementation("net.rubygrapefruit:native-platform-linux-amd64-ncurses6:0.22-milestone-23")
-
+    implementation "net.rubygrapefruit:native-platform:0.22-milestone-23"
+    implementation "net.rubygrapefruit:file-events:0.22-milestone-23"
     
 }
