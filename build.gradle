@@ -1,0 +1,40 @@
+plugins { 
+    id 'java-library'   
+    id 'com.diffplug.spotless' version '7.0.3'
+}
+
+spotless {
+    java {
+        target "**/*.java"		  
+        googleJavaFormat()
+    }
+}   
+
+tasks.named('compileJava') {
+    dependsOn(
+        rootProject.subprojects.findAll { sub ->
+            sub != project && sub.tasks.findByName('shadowJar') != null && sub.tasks.findByName('jar') != null
+        }.collect { sub ->
+            sub.tasks.named('shadowJar')
+            sub.tasks.named('jar')
+        }
+    )
+}
+
+afterEvaluate {
+    rootProject.subprojects.each { sub ->
+        if (sub.name != project.name) {
+            dependencies {                
+                implementation project(":${sub.name}")
+            }
+        }
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+	
+dependencies {
+}
