@@ -11,7 +11,9 @@ shadowJar {
     exclude '**/*-classpath.properties'
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
-
+    
+    exclude 'org/gradle/internal/installation/CurrentGradleInstallationLocator*'
+    
     archiveFileName.set("${project.name}.jar")
 }
 
