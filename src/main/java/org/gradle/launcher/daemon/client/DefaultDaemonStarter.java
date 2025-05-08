@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.gradle.api.GradleException;
 import org.gradle.api.UncheckedIOException;
 import org.gradle.api.internal.classpath.DefaultModuleRegistry;
@@ -128,7 +129,13 @@ public class DefaultDaemonStarter implements DaemonStarter {
         contextClassLoader = contextClassLoader.getParent();
       }
 
-      classpath = DefaultClassPath.of(dexElements);
+      classpath =
+          DefaultClassPath.of(
+              !dexElements.isEmpty()
+                  ? dexElements
+                  : Arrays.stream(System.getProperty("java.class.path").split(File.pathSeparator))
+                      .map(File::new)
+                      .collect(Collectors.toList()));
 
     } else {
       String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
