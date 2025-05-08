@@ -12,12 +12,14 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/launcher/GradleMain*'
+
     archiveFileName.set("${project.name}.jar")
 }
 
 dependencies {
     implementation files (
-        'libs/gradle-bootstrap-7.5.jar'
+        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-bootstrap-7.5.jar'
     )
 }
 

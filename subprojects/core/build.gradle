@@ -12,12 +12,15 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/api/internal/classpath/DefaultModuleRegistry*'
+    exclude '**/*org/gradle/internal/installation/GradleRuntimeShadedJarDetector*'
+
     archiveFileName.set("${project.name}.jar")
 }
 
 dependencies {
     implementation files (
-        'libs/gradle-core-7.5.jar'
+        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-core-7.5.jar'
     )
 }
 

@@ -12,12 +12,13 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+
     archiveFileName.set("${project.name}.jar")
 }
 
 dependencies {
     implementation files (
-        'libs/gradle-diagnostics-7.5.jar'
+        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-diagnostics-7.5.jar'
     )
 }
 

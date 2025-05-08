@@ -12,12 +12,14 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/internal/nativeintegration/jna/UnsupportedEnvironment*'
+
     archiveFileName.set("${project.name}.jar")
 }
 
 dependencies {
     implementation files (
-        'libs/gradle-native-7.5.jar'
+        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-native-7.5.jar'
     )
 }
 

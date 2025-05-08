@@ -12,12 +12,14 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/internal/jvm/inspection/DefaultJvmMetadataDetector*'
+
     archiveFileName.set("${project.name}.jar")
 }
 
 dependencies {
     implementation files (
-        'libs/gradle-jvm-services-7.5.jar'
+        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-jvm-services-7.5.jar'
     )
 }
 

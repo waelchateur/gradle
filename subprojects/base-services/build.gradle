@@ -12,12 +12,17 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/api/JavaVersion*'
+    exclude '**/*org/gradle/internal/classloader/ClasspathUtil*'
+    exclude '**/*org/gradle/internal/os/OperatingSystem*'
+    exclude '**/*org/gradle/internal/jvm/Jvm*'
+
     archiveFileName.set("${project.name}.jar")
 }
 
 dependencies {
     implementation files (
-        'libs/gradle-base-services-7.5.jar'
+        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-base-services-7.5.jar'
     )
 }
 

@@ -12,12 +12,16 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/launcher/bootstrap/ProcessBootstrap*'
+    exclude '**/*org/gradle/launcher/daemon/client/DefaultDaemonStarter*'
+    exclude '**/*org/gradle/launcher/daemon/bootstrap/GradleDaemon*'
+
     archiveFileName.set("${project.name}.jar")
 }
 
 dependencies {
     implementation files (
-        'libs/gradle-launcher-7.5.jar'
+        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-launcher-7.5.jar'
     )
 }
 
