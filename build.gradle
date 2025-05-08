@@ -39,17 +39,64 @@ java {
 dependencies {
     
     
+    implementation("org.jetbrains:annotations:20.1.0")
+    implementation("org.apache.ant:ant:1.10.11")
+    implementation("org.apache.ant:ant-antlr:1.10.12")
+    implementation("org.apache.ant:ant-junit:1.10.12")
+    implementation("org.apache.ant:ant-launcher:1.10.11")
+    implementation("org.antlr:antlr4-runtime:4.7.2")
+    
+    implementation("org.ow2.asm:asm:9.2")
+    implementation("org.ow2.asm:asm-analysis:9.2")    
+    implementation("org.ow2.asm:asm-commons:9.2")
+    implementation("org.ow2.asm:asm-tree:9.2")
+    
+    implementation("org.apache.commons:commons-compress:1.21")
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-lang:commons-lang:2.6")
 
+    // implementation("com.google.errorprone:error_prone_annotations:2.36.0")
+    implementation("com.google.guava:failureaccess:1.0.1")
+    
+    // implementation("it.unimi.dsi:fastutil:8.5.2")
+    
+    implementation "net.rubygrapefruit:file-events:0.22-milestone-23"
+  
+    implementation("org.codehaus.groovy:groovy:3.0.10")
+    implementation("org.codehaus.groovy:groovy-ant:3.0.10")
+    implementation("org.codehaus.groovy:groovy-astbuilder:3.0.10")
+    implementation("org.codehaus.groovy:groovy-console:3.0.10")
+    implementation("org.codehaus.groovy:groovy-datetime:3.0.10")
+    implementation("org.codehaus.groovy:groovy-dateutil:3.0.10")
+    implementation("org.codehaus.groovy:groovy-docgenerator:3.0.10")
+    implementation("org.codehaus.groovy:groovy-groovydoc:3.0.10")
+    implementation("org.codehaus.groovy:groovy-json:3.0.10")
+    implementation("org.codehaus.groovy:groovy-nio:3.0.10")
+    implementation("org.codehaus.groovy:groovy-sql:3.0.10")
+    implementation("org.codehaus.groovy:groovy-swing:3.0.10")
+    implementation("org.codehaus.groovy:groovy-templates:3.0.10")
+    implementation("org.codehaus.groovy:groovy-test:3.0.10")
+    implementation("org.codehaus.groovy:groovy-xml:3.0.10")
+    
     implementation("com.google.guava:guava:30.1.1-jre")  
     
+    implementation("org.hamcrest:hamcrest-core:1.3")
+       
     implementation("org.fusesource.jansi:jansi:1.18") 
     
+    implementation("com.github.javaparser:javaparser-core:3.17.0")
+    
     implementation("javax.inject:javax.inject:1")
+    
+    implementation("org.slf4j:jcl-over-slf4j:1.7.30")
+  
+    implementation("net.java.dev.jna:jna:5.10.0")
   
     implementation("com.google.code.findbugs:jsr305:3.0.2")
+    
     implementation("org.slf4j:jul-to-slf4j:1.7.30")
+    
+    implementation("junit:junit:4.13.2")
     
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
     
@@ -57,18 +104,27 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21")  
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")  
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21")      
-    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.4.1")     
+    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.4.1")  
+       
     implementation("com.esotericsoftware.kryo:kryo:2.24.0")
+    
     implementation("org.slf4j:log4j-over-slf4j:1.7.30")
+    
     implementation("com.esotericsoftware.minlog:minlog:1.2")
+     
+    implementation "net.rubygrapefruit:native-platform:0.22-milestone-23"
 
-   
+    implementation("org.objenesis:objenesis:2.6")
+    
+    implementation("com.thoughtworks.qdox:qdox:1.12.1")
+    
     implementation("org.slf4j:slf4j-api:1.7.30")
     
-    implementation "net.rubygrapefruit:native-platform:0.22-milestone-23"
-    implementation "net.rubygrapefruit:file-events:0.22-milestone-23"
+    implementation("org.tomlj:tomlj:1.0.0")
     
-    
+    implementation("xml-apis:xml-apis:1.4.01")
+
+           
     implementation("com.github.KodTik-Innovations:java-stubs:1.1.0")      
  
     
