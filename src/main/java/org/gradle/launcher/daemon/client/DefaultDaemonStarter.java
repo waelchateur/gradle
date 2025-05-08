@@ -148,7 +148,10 @@ public class DefaultDaemonStarter implements DaemonStarter {
     daemonArgs.add(daemonParameters.getEffectiveJvm().getJavaExecutable().getAbsolutePath());
 
     List<String> daemonOpts = daemonParameters.getEffectiveJvmArgs();
-    daemonArgs.addAll(daemonOpts);
+
+    // deenu modfify: don't add all daemonOpts
+    // daemonArgs.addAll(daemonOpts);
+
     daemonArgs.add("-cp");
     daemonArgs.add(CollectionUtils.join(File.pathSeparator, classpath.getAsFiles()));
 

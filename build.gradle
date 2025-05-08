@@ -38,6 +38,7 @@ java {
 	
 dependencies {
     
+    
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-lang:commons-lang:2.6")
 
@@ -46,16 +47,29 @@ dependencies {
     implementation("org.fusesource.jansi:jansi:1.18") 
     
     implementation("javax.inject:javax.inject:1")
-    
+  
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.slf4j:jul-to-slf4j:1.7.30")
+    
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
+    
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")      
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21")  
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")  
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21")      
+    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.4.1")     
+    implementation("com.esotericsoftware.kryo:kryo:2.24.0")
+    implementation("org.slf4j:log4j-over-slf4j:1.7.30")
+    implementation("com.esotericsoftware.minlog:minlog:1.2")
+
    
     implementation("org.slf4j:slf4j-api:1.7.30")
     
     implementation "net.rubygrapefruit:native-platform:0.22-milestone-23"
     implementation "net.rubygrapefruit:file-events:0.22-milestone-23"
     
+    
     implementation("com.github.KodTik-Innovations:java-stubs:1.1.0")      
-
+ 
     
 }
