@@ -15,8 +15,9 @@
  */
 package org.gradle.internal.classloader;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import static org.gradle.reflection.android.AndroidSupport.isDalvik;
+import static org.gradle.reflection.android.AndroidSupport.isRunningAndroid;
+
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -201,6 +202,15 @@ public abstract class ClassLoaderUtils {
     @Override
     @SuppressWarnings("unchecked")
     public <T> Class<T> defineClass(ClassLoader classLoader, String className, byte[] classBytes) {
+      // deenu modfify: load decoratorClass
+      if (isRunningAndroid() || isDalvik()) {
+        try {
+          return (Class<T>) classLoader.loadClass(className);
+        } catch (ClassNotFoundException e) {
+          throw new RuntimeException(e);
+        }
+      }
+
       return (Class<T>)
           defineClassMethod.invoke(classLoader, className, classBytes, 0, classBytes.length);
     }
@@ -208,22 +218,6 @@ public abstract class ClassLoaderUtils {
     @Override
     public <T> Class<T> defineDecoratorClass(
         Class<?> decoratedClass, ClassLoader classLoader, String className, byte[] classBytes) {
-
-      try {
-        // Define a file path based on the class name
-        String fileName = className.replace('.', '/') + ".class";
-        File outputFile = new File("/storage/emulated/0/Test/GradleSrc", fileName);
-
-        // Create parent directories if they don't exist
-        outputFile.getParentFile().mkdirs();
-
-        // Write the bytes to the file
-        FileOutputStream fos = new FileOutputStream(outputFile);
-        fos.write(classBytes);
-      } catch (Throwable e) {
-
-      }
-
       return defineClass(classLoader, className, classBytes);
     }
   }
@@ -239,22 +233,6 @@ public abstract class ClassLoaderUtils {
     public <T> Class<T> defineDecoratorClass(
         Class<?> decoratedClass, ClassLoader classLoader, String className, byte[] classBytes) {
       try {
-        // Define a file path based on the class name
-        String fileName = className.replace('.', '/') + ".class";
-        File outputFile = new File("/storage/emulated/0/Test/GradleSrc", fileName);
-
-        // Create parent directories if they don't exist
-        outputFile.getParentFile().mkdirs();
-
-        // Write the bytes to the file
-        FileOutputStream fos = new FileOutputStream(outputFile);
-        fos.write(classBytes);
-      } catch (Throwable e) {
-
-      }
-
-      try {
-
         // Lookup.defineClass can only define a class into same classloader as the lookup object
         // we have to use the fallback defineClass() if they're not same, which is the case of
         // ManagedProxyClassGenerator
