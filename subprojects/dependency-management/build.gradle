@@ -12,6 +12,7 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/api/internal/artifacts/mvnsettings/DefaultLocalMavenRepositoryLocator*'
 
     archiveFileName.set("${project.name}.jar")
 }
