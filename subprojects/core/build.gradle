@@ -20,7 +20,7 @@ shadowJar {
 
 dependencies {
     implementation files (
-        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-core-7.5.jar'
+        'libs/gradle-core-7.5.jar'
     )
 }
 

@@ -19,7 +19,7 @@ shadowJar {
 
 dependencies {
     implementation files (
-        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-bootstrap-7.5.jar'
+        'libs/gradle-bootstrap-7.5.jar'
     )
 }
 

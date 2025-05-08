@@ -21,7 +21,7 @@ shadowJar {
 
 dependencies {
     implementation files (
-        'libs//storage/emulated/0/Download/gradle-7.5-rc-1/gradlelibs/gradle-launcher-7.5.jar'
+        'libs/gradle-launcher-7.5.jar'
     )
 }
 
