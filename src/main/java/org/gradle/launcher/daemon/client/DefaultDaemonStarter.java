@@ -15,6 +15,9 @@
  */
 package org.gradle.launcher.daemon.client;
 
+import static org.gradle.reflection.android.AndroidSupport.isDalvik;
+import static org.gradle.reflection.android.AndroidSupport.isRunningAndroid;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import org.gradle.api.GradleException;
 import org.gradle.api.UncheckedIOException;
 import org.gradle.api.internal.classpath.DefaultModuleRegistry;
@@ -30,6 +34,7 @@ import org.gradle.api.internal.classpath.ModuleRegistry;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.internal.classpath.ClassPath;
+import org.gradle.internal.classpath.DefaultClassPath;
 import org.gradle.internal.concurrent.CompositeStoppable;
 import org.gradle.internal.installation.CurrentGradleInstallation;
 import org.gradle.internal.installation.GradleInstallation;
@@ -90,7 +95,48 @@ public class DefaultDaemonStarter implements DaemonStarter {
       classpath = registry.getModule("gradle-launcher").getImplementationClasspath();
       searchClassPath = Collections.emptyList();
     }
-    if (classpath.isEmpty()) {
+
+    // deenu modfify: set classpath from class
+    if (isRunningAndroid() || isDalvik()) {
+
+      ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+      List<File> dexElements = new ArrayList<>();
+
+      Function<String, String> extractor = s -> s.substring(s.indexOf("[") + 1, s.lastIndexOf("]"));
+      while (contextClassLoader != null) {
+        try {
+          Class<?> aClass = Class.forName("dalvik.system.PathClassLoader");
+          if (aClass.isAssignableFrom(contextClassLoader.getClass())) {
+            String classLoaderString = contextClassLoader.toString();
+            String dexPathList = extractor.apply(classLoaderString);
+            String fileList = extractor.apply(extractor.apply(dexPathList));
+            fileList = fileList.substring(0, fileList.lastIndexOf("]"));
+            String[] filePaths = fileList.split(", ");
+            for (String filePath : filePaths) {
+              if (filePath.startsWith("dex file ")) {
+                dexElements.add(
+                    new File(filePath.substring("dex file  ".length(), filePath.length() - 1)));
+              } else if (filePath.startsWith("zip file ")) {
+                dexElements.add(
+                    new File(filePath.substring("zip file  ".length(), filePath.length() - 1)));
+              }
+            }
+          }
+        } catch (Exception e) {
+          // ignored
+        }
+        contextClassLoader = contextClassLoader.getParent();
+      }
+
+      classpath = DefaultClassPath.of(dexElements);
+
+    } else {
+      String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+      classpath = DefaultClassPath.of(new File(path));
+    }
+
+    // deenu modfify: don't throw for android/dalvik
+    if (classpath.isEmpty() && !(isRunningAndroid() || isDalvik())) {
       throw new IllegalStateException(
           "Unable to construct a bootstrap classpath when starting the daemon");
     }

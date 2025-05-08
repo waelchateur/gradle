@@ -72,7 +72,6 @@ public abstract class OperatingSystem {
     } else if (osName.contains("linux")) {
       // deenu modify: add android
       return (isRunningAndroid() || isDalvik()) ? ANDROID : LINUX;
-
     } else if (osName.contains("freebsd")) {
       return FREE_BSD;
     } else {
