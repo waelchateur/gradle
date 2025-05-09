@@ -98,6 +98,11 @@ dependencies {
     implementation("xml-apis:xml-apis:1.4.01")
     
     // plugins
+    implementation("com.amazonaws:aws-java-sdk-core:1.11.948")
+    implementation("com.amazonaws:aws-java-sdk-kms:1.11.948")
+    implementation("com.amazonaws:aws-java-sdk-s3:1.11.948")
+    implementation("com.amazonaws:aws-java-sdk-sts:1.11.948")
+
     implementation("org.apache.maven:maven-builder-support:3.6.3")
     implementation("org.apache.maven:maven-model:3.6.3")
     implementation("org.apache.maven:maven-repository-metadata:3.6.3")
