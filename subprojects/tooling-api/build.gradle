@@ -12,6 +12,8 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/tooling/internal/consumer/DistributionFactory*'
+    exclude '**/*org/gradle/tooling/internal/consumer/loader/DefaultToolingImplementationLoader*'
 
     archiveFileName.set("${project.name}.jar")
 }
