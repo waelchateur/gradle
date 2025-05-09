@@ -16,6 +16,7 @@ shadowJar {
     exclude '**/*org/gradle/launcher/daemon/client/DefaultDaemonStarter*'
     exclude '**/*org/gradle/launcher/daemon/bootstrap/GradleDaemon*'
     exclude '**/*org/gradle/launcher/daemon/configuration/DaemonParameters*'
+    exclude '**/*org/gradle/launcher/cli/BuildActionsFactory*'
 
     archiveFileName.set("${project.name}.jar")
 }
