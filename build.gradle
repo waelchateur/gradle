@@ -51,8 +51,11 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-lang:commons-lang:2.6")
     implementation("com.google.guava:failureaccess:1.0.1")    
+
     // implementation("it.unimi.dsi:fastutil:8.5.2")    
-    implementation "net.rubygrapefruit:file-events:0.22-milestone-23" 
+
+    implementation "net.rubygrapefruit:file-events:0.22-milestone-23"
+     
     implementation("org.codehaus.groovy:groovy:3.0.10")
     implementation("org.codehaus.groovy:groovy-ant:3.0.10")
     implementation("org.codehaus.groovy:groovy-astbuilder:3.0.10")
@@ -79,22 +82,32 @@ dependencies {
     implementation("org.slf4j:jul-to-slf4j:1.7.30")    
     implementation("junit:junit:4.13.2")
     
+    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.6.21")    
+    implementation("org.jetbrains.kotlin:kotlin-daemon-embeddable:1.6.21")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
-    
+    implementation("org.jetbrains.kotlin:kotlin-sam-with-receiver-compiler-plugin:1.6.21")        
+    implementation("org.jetbrains.kotlin:kotlin-script-runtime:1.6.21")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-common:1.6.21")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.6.21")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.6.21")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm:1.6.21")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host:1.6.21")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")      
     implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21")  
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")  
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21")      
-    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.4.1")         
+    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.4.1")                  
     implementation("com.esotericsoftware.kryo:kryo:2.24.0")    
     implementation("org.slf4j:log4j-over-slf4j:1.7.30")   
     implementation("com.esotericsoftware.minlog:minlog:1.2")     
+    
     implementation "net.rubygrapefruit:native-platform:0.22-milestone-23"
+    
     implementation("org.objenesis:objenesis:2.6")   
     implementation("com.thoughtworks.qdox:qdox:1.12.1")  
     implementation("org.slf4j:slf4j-api:1.7.30")    
     implementation("org.tomlj:tomlj:1.0.0")
-    
+    implementation("org.jetbrains.intellij.deps:trove4j:1.0.20200330") 
     implementation("xml-apis:xml-apis:1.4.01")
     
     // plugins
