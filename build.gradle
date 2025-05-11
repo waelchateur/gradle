@@ -53,8 +53,8 @@ dependencies {
     implementation("commons-lang:commons-lang:2.6")
     implementation("com.google.guava:failureaccess:1.0.1")    
     // implementation("it.unimi.dsi:fastutil:8.5.2")    
-
-    implementation "net.rubygrapefruit:file-events:0.22-milestone-23"
+    implementation("net.rubygrapefruit:file-events:0.22-milestone-23")
+    implementation("net.rubygrapefruit:file-events-linux-aarch64:0.22-milestone-23")
      
     implementation("org.codehaus.groovy:groovy:3.0.10")
     implementation("org.codehaus.groovy:groovy-ant:3.0.10")
@@ -98,10 +98,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.4.1")                  
     implementation("com.esotericsoftware.kryo:kryo:2.24.0")    
     implementation("org.slf4j:log4j-over-slf4j:1.7.30")   
-    implementation("com.esotericsoftware.minlog:minlog:1.2")     
-    
+    implementation("com.esotericsoftware.minlog:minlog:1.2")         
     implementation "net.rubygrapefruit:native-platform:0.22-milestone-23"
-    
+    implementation("net.rubygrapefruit:native-platform-linux-aarch64:0.22-milestone-23")
+    implementation("net.rubygrapefruit:native-platform-linux-aarch64-ncurses5:0.22-milestone-23")
+    implementation("net.rubygrapefruit:native-platform-linux-aarch64-ncurses6:0.22-milestone-23")
     implementation("org.objenesis:objenesis:2.6")   
     implementation("com.thoughtworks.qdox:qdox:1.12.1")  
     implementation("org.slf4j:slf4j-api:1.7.30")    
