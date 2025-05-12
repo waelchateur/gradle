@@ -56,7 +56,9 @@ dependencies {
     implementation("net.rubygrapefruit:file-events:0.22-milestone-23")
     implementation("net.rubygrapefruit:file-events-linux-aarch64:0.22-milestone-23")
 
-    implementation("org.codehaus.groovy:groovy:3.0.10")
+    // implementation("org.codehaus.groovy:groovy:3.0.10")
+    // implementation("com.github.KodTik-Innovations:groovy:3.0.10")   
+    implementation("com.github.KodTik-Innovations:groovy:main-SNAPSHOT")     
     implementation("org.codehaus.groovy:groovy-ant:3.0.10")
     implementation("org.codehaus.groovy:groovy-astbuilder:3.0.10")
     // implementation("org.codehaus.groovy:groovy-console:3.0.10")
