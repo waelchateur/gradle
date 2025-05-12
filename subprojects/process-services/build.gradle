@@ -12,6 +12,7 @@ shadowJar {
     exclude '**/*-names.properties'
     exclude '**/*package-info.class'
 
+    exclude '**/*org/gradle/process/internal/health/memory/DefaultOsMemoryInfo*'
 
     archiveFileName.set("${project.name}.jar")
 }

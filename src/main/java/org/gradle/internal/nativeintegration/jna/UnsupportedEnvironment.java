@@ -18,9 +18,7 @@ package org.gradle.internal.nativeintegration.jna;
 import static org.gradle.reflection.android.AndroidSupport.isDalvik;
 import static org.gradle.reflection.android.AndroidSupport.isRunningAndroid;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.lang.management.ManagementFactory;
 import java.util.Map;
 import org.gradle.internal.nativeintegration.EnvironmentModificationResult;
@@ -48,22 +46,8 @@ public class UnsupportedEnvironment implements ProcessEnvironment {
    */
   private Long extractPIDFromRuntimeMXBeanName() {
     // deenu modify: return pid
-    if (isRunningAndroid()) {
-      try {
-        Integer pidInt =
-            (Integer) Class.forName("android.os.Process").getDeclaredMethod("myPid").invoke(null);
-
-        Long pid_ = Long.parseLong(String.valueOf(pidInt));
-        if (pid_ != null) {
-          return pid_;
-        }
-      } catch (ReflectiveOperationException | UnsatisfiedLinkError ignored) {
-        return getPidFallBack();
-      }
-    }
-
-    if (isDalvik()) {
-      return getPidFallBack();
+    if (isRunningAndroid() || isDalvik()) {
+      return getPidFromProcSelf();
     }
 
     String runtimeMXBeanName = ManagementFactory.getRuntimeMXBean().getName();
@@ -154,7 +138,7 @@ public class UnsupportedEnvironment implements ProcessEnvironment {
         "We don't support this operating system: " + OperatingSystem.current());
   }
 
-  private Long getPidFallBack() {
+  private Long getPidFromProcSelf() {
     try {
       File self = new File("/proc/self");
       Long pid_ = Long.parseLong(self.getCanonicalFile().getName());
@@ -163,29 +147,6 @@ public class UnsupportedEnvironment implements ProcessEnvironment {
       }
     } catch (Exception ignored) {
     }
-
-    BufferedReader reader = null;
-    try {
-      reader = new BufferedReader(new FileReader("/proc/self/stat"));
-      String line = reader.readLine();
-      if (line != null) {
-        String[] parts = line.split(" ");
-
-        Long pid_ = Long.parseLong(parts[0]);
-        if (pid_ != null) {
-          return pid_;
-        }
-      }
-    } catch (Exception ignored) {
-    } finally {
-      if (reader != null) {
-        try {
-          reader.close();
-        } catch (Exception ignored) {
-        }
-      }
-    }
-
     return null;
   }
 }
