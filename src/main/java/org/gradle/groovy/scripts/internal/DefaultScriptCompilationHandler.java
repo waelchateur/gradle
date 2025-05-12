@@ -16,6 +16,9 @@
 
 package org.gradle.groovy.scripts.internal;
 
+import static org.gradle.reflection.android.AndroidSupport.isDalvik;
+import static org.gradle.reflection.android.AndroidSupport.isRunningAndroid;
+
 import groovy.lang.CustomGroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
 import groovy.lang.GroovyResourceLoader;
@@ -49,6 +52,7 @@ import org.gradle.groovy.scripts.ScriptSource;
 import org.gradle.groovy.scripts.Transformer;
 import org.gradle.internal.UncheckedException;
 import org.gradle.internal.classloader.ClassLoaderUtils;
+import org.gradle.internal.classloader.DexBackedURLClassLoader;
 import org.gradle.internal.classloader.ImplementationHashAware;
 import org.gradle.internal.classloader.VisitableURLClassLoader;
 import org.gradle.internal.classpath.ClassPath;
@@ -137,6 +141,7 @@ public class DefaultScriptCompilationHandler implements ScriptCompilationHandler
     // deenu modify: add parent class loader
     ClassLoader parent = getClass().getClassLoader();
 
+    // deenu modify: use CustomGroovyClassLoader
     CustomGroovyClassLoader groovyClassLoader =
         new CustomGroovyClassLoader(parent, configuration, false) {
 
@@ -422,7 +427,15 @@ public class DefaultScriptCompilationHandler implements ScriptCompilationHandler
           scopeName,
           scriptClassPath,
           sourceHashCode,
-          parent -> new ScriptClassLoader(source, parent, scriptClassPath, sourceHashCode));
+          // deenu modify: use return
+          /** parent -> new ScriptClassLoader(source, parent, scriptClassPath, sourceHashCode)); */
+          parent -> {
+            // deenu modify: android check
+            if (isRunningAndroid() || isDalvik()) {
+              return new CustomScriptClassLoader(source, parent, scriptClassPath, sourceHashCode);
+            }
+            return new ScriptClassLoader(source, parent, scriptClassPath, sourceHashCode);
+          });
     }
   }
 
@@ -453,6 +466,53 @@ public class DefaultScriptCompilationHandler implements ScriptCompilationHandler
 
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+      // Generated script class name must be unique - take advantage of this to avoid delegation
+      if (name.startsWith(scriptSource.getClassName())) {
+        // Synchronized to avoid multiple threads attempting to define the same class on a lookup
+        // miss
+        synchronized (this) {
+          Class<?> cl = findLoadedClass(name);
+          if (cl == null) {
+            cl = findClass(name);
+          }
+          if (resolve) {
+            resolveClass(cl);
+          }
+          return cl;
+        }
+      }
+      return super.loadClass(name, resolve);
+    }
+  }
+
+  // deenu modify: add CustomScriptClassLoader
+  private static class CustomScriptClassLoader extends DexBackedURLClassLoader
+      implements ImplementationHashAware {
+    private final ScriptSource scriptSource;
+    private final HashCode implementationHash;
+
+    CustomScriptClassLoader(
+        ScriptSource scriptSource,
+        ClassLoader parent,
+        ClassPath classPath,
+        HashCode implementationHash) {
+      super(
+          "groovy-script-" + scriptSource.getFileName() + "-loader",
+          parent,
+          classPath,
+          implementationHash);
+      classPath.getAsFiles().forEach(file -> compileJar2Dex(file.getAbsolutePath()));
+      this.scriptSource = scriptSource;
+      this.implementationHash = implementationHash;
+    }
+
+    @Override
+    public HashCode getImplementationHash() {
+      return implementationHash;
+    }
+
+    @Override
+    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
       // Generated script class name must be unique - take advantage of this to avoid delegation
       if (name.startsWith(scriptSource.getClassName())) {
         // Synchronized to avoid multiple threads attempting to define the same class on a lookup

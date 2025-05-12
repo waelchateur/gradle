@@ -29,6 +29,8 @@ dependencyResolutionManagement {
 
 rootProject.name = 'gradle'
 
+include(":android-stubs")
+
 def subprojectsDir = file("subprojects")
 if (subprojectsDir.exists() && subprojectsDir.isDirectory()) {
     subprojectsDir.listFiles({ it.isDirectory() } as FileFilter)?.each { dir ->
