@@ -14,6 +14,7 @@ shadowJar {
 
     exclude '**/*org/gradle/api/internal/classpath/DefaultModuleRegistry*'
     exclude '**/*org/gradle/internal/installation/GradleRuntimeShadedJarDetector*'
+    exclude '**/*org/gradle/groovy/scripts/internal/DefaultScriptCompilationHandler*'
 
     archiveFileName.set("${project.name}.jar")
 }
