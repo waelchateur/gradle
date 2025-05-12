@@ -1,5 +1,7 @@
 package org.gradle.internal.classloader;
 
+import static java.util.stream.Collectors.joining;
+
 import com.android.tools.r8.CompilationFailedException;
 import com.android.tools.r8.CompilationMode;
 import com.android.tools.r8.D8;
@@ -9,11 +11,13 @@ import com.android.tools.r8.origin.Origin;
 import dalvik.system.BaseDexClassLoader;
 import dalvik.system.DexClassLoader;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import org.gradle.api.GradleException;
@@ -106,11 +110,11 @@ public class DexBackedURLClassLoader extends DexClassLoader {
     return super.getResource(name);
   }
 
-  protected void compileJar(String path) {
+  protected void compileJar(String path, ClassLoader classLoader) {
     File jarFile = new File(URI.create(path).getPath());
     File dexFile = dexJar(jarFile, null);
 
-    addDexPathPublic(dexFile);
+    addDexPathPublic(dexFile, classLoader);
   }
 
   public static File dexJar(File inputJar, File outputDir) {
@@ -128,16 +132,16 @@ public class DexBackedURLClassLoader extends DexClassLoader {
     builder.setOutput(outputDir.toPath(), OutputMode.DexIndexed);
     try {
       D8.run(builder.build());
+      return outputDir;
     } catch (CompilationFailedException e) {
       throw new GradleException(e.getMessage(), e.getCause());
     }
-    return outputDir;
   }
 
-  protected void compileClassBytes(byte[] data, String className) {
+  protected void compileClassBytes(byte[] data, String className, ClassLoader classLoader) {
     File dexFile = dexClassBytes(data, className, null);
 
-    addDexPathPublic(dexFile);
+    addDexPathPublic(dexFile, classLoader);
   }
 
   public static File dexClassBytes(byte[] data, String className, File outputDir) {
@@ -153,20 +157,42 @@ public class DexBackedURLClassLoader extends DexClassLoader {
       builder.setOutput(outputDir.toPath(), OutputMode.DexIndexed);
       builder.addClassProgramData(data, Origin.root());
       D8.run(builder.build());
+      return outputDir;
     } catch (CompilationFailedException e) {
       throw new GradleException(e.getMessage(), e.getCause());
     }
-    return outputDir;
   }
 
-  public void addDexPathPublic(String path) {
-    addDexPathPublic(new File(path));
+  public static String dexClassBytes(byte[] data, String className) {
+    File outputDir = null;
+    try {
+      File cacheDir = new File(System.getProperty("java.io.tmpdir"), "dexCache");
+      if (!cacheDir.exists()) cacheDir.mkdirs();
+      outputDir = new File(cacheDir, className + ".zip");
+
+      D8Command.Builder builder = D8Command.builder();
+      builder.setMinApiLevel(26);
+      builder.setOutput(outputDir.toPath(), OutputMode.DexIndexed);
+      builder.addClassProgramData(data, Origin.root());
+      D8.run(builder.build());
+
+      return Files.list(outputDir.toPath())
+          .map(it -> it.toFile().getAbsolutePath())
+          .collect(joining(File.pathSeparator));
+
+    } catch (CompilationFailedException | IOException e) {
+      throw new GradleException(e.getMessage(), e.getCause());
+    }
   }
 
-  public void addDexPathPublic(File path) {
+  public void addDexPathPublic(String path, ClassLoader classLoader) {
+    addDexPathPublic(new File(path), classLoader);
+  }
+
+  public void addDexPathPublic(File path, ClassLoader classLoader) {
     try {
       path.setWritable(false);
-      addDexToClasspath(path, this);
+      addDexToClasspath(path, classLoader != null ? classLoader : this);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

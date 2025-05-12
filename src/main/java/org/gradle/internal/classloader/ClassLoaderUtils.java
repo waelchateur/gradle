@@ -25,6 +25,9 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.Nullable;
 import org.gradle.api.JavaVersion;
 import org.gradle.internal.Factory;
@@ -211,7 +214,25 @@ public abstract class ClassLoaderUtils {
         }
 
         try {
-          new DexBackedURLClassLoader().compileClassBytes(classBytes, className);
+          File cacheDir = new File(System.getProperty("java.io.tmpdir"), "dexCache");
+          if (!cacheDir.exists()) cacheDir.mkdirs();
+
+          List<String> dexPaths = new ArrayList<>();
+
+          File[] dexFiles = cacheDir.listFiles(file -> file.getName().endsWith("_Decorated.zip"));
+
+          if (dexFiles == null) {
+            String paths = DexBackedURLClassLoader.dexClassBytes(classBytes, className);
+            dexPaths.addAll(Arrays.asList(paths.split(File.pathSeparator)));
+          } else {
+            for (File dexFile : dexFiles) {
+              dexPaths.add(dexFile.getAbsolutePath());
+            }
+          }
+
+          for (String path : dexPaths) {
+            new DexBackedURLClassLoader().addDexPathPublic(path, classLoader);
+          }
 
           return (Class<T>) classLoader.loadClass(className);
         } catch (ClassNotFoundException e) {
