@@ -213,6 +213,7 @@ public abstract class ClassLoaderUtils {
         } catch (ClassNotFoundException e) {
         }
 
+        // deenu modfify: load decoratorClass from cache
         try {
           File cacheDir = new File(System.getProperty("java.io.tmpdir"), "dexCache");
           if (!cacheDir.exists()) cacheDir.mkdirs();

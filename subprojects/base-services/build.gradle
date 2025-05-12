@@ -15,6 +15,10 @@ shadowJar {
     exclude '**/*org/gradle/api/JavaVersion*'
     exclude '**/*org/gradle/internal/classloader/ClasspathUtil*'
     exclude '**/*org/gradle/internal/classloader/ClassLoaderUtils*'
+    exclude '**/*org/gradle/internal/classloader/ClassLoaderVisitor*'
+    exclude '**/*org/gradle/internal/classloader/ConfigurableClassLoaderHierarchyHasher*'
+    exclude '**/*org/gradle/internal/classloader/DefaultClassLoaderFactory*'
+    exclude '**/*org/gradle/internal/classloader/TransformingClassLoader*'
     exclude '**/*org/gradle/internal/os/OperatingSystem*'
     exclude '**/*org/gradle/internal/jvm/Jvm*'
 

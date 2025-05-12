@@ -43,7 +43,11 @@ public class DexBackedURLClassLoader extends DexClassLoader {
   }
 
   public DexBackedURLClassLoader(ClassLoader parent) {
-    this("", parent, ClassPath.EMPTY, null);
+    this("", parent, ClassPath.EMPTY);
+  }
+
+  public DexBackedURLClassLoader(String name, ClassLoader parent, ClassPath classPath) {
+    this(name, parent, classPath, null);
   }
 
   public DexBackedURLClassLoader(
