@@ -18,6 +18,7 @@ package org.gradle.internal.classloader;
 import static org.gradle.reflection.android.AndroidSupport.isDalvik;
 import static org.gradle.reflection.android.AndroidSupport.isRunningAndroid;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -205,6 +206,13 @@ public abstract class ClassLoaderUtils {
       // deenu modfify: load decoratorClass
       if (isRunningAndroid() || isDalvik()) {
         try {
+          return (Class<T>) classLoader.loadClass(className);
+        } catch (ClassNotFoundException e) {
+        }
+
+        try {
+          new DexBackedURLClassLoader().compileClassBytes(classBytes, className);
+
           return (Class<T>) classLoader.loadClass(className);
         } catch (ClassNotFoundException e) {
           throw new RuntimeException(e);

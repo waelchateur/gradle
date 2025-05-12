@@ -5,6 +5,7 @@ import com.android.tools.r8.CompilationMode;
 import com.android.tools.r8.D8;
 import com.android.tools.r8.D8Command;
 import com.android.tools.r8.OutputMode;
+import com.android.tools.r8.origin.Origin;
 import dalvik.system.BaseDexClassLoader;
 import dalvik.system.DexClassLoader;
 import java.io.File;
@@ -32,6 +33,10 @@ public class DexBackedURLClassLoader extends DexClassLoader {
 
   private final URLClassLoader urlClassLoader;
   private final HashCode implementationHash;
+
+  public DexBackedURLClassLoader() {
+    this(null);
+  }
 
   public DexBackedURLClassLoader(ClassLoader parent) {
     this("", parent, ClassPath.EMPTY, null);
@@ -103,14 +108,18 @@ public class DexBackedURLClassLoader extends DexClassLoader {
 
   protected void compileJar(String path) {
     File jarFile = new File(URI.create(path).getPath());
-    File dexFile = new File(jarFile.getParentFile(), jarFile.getName().replace(".jar", ".zip"));
-
-    dexJar(jarFile, dexFile);
+    File dexFile = dexJar(jarFile, null);
 
     addDexPathPublic(dexFile);
   }
 
-  public static void dexJar(File inputJar, File outputDir) {
+  public static File dexJar(File inputJar, File outputDir) {
+    if (outputDir == null) {
+      File cacheDir = new File(System.getProperty("java.io.tmpdir"), "dexCache");
+      if (!cacheDir.exists()) cacheDir.mkdirs();
+      outputDir = new File(cacheDir, inputJar.getName().replace(".jar", ".zip"));
+    }
+
     D8Command.Builder builder = D8Command.builder();
     builder.setMode(CompilationMode.RELEASE);
     builder.setMinApiLevel(26);
@@ -122,6 +131,32 @@ public class DexBackedURLClassLoader extends DexClassLoader {
     } catch (CompilationFailedException e) {
       throw new GradleException(e.getMessage(), e.getCause());
     }
+    return outputDir;
+  }
+
+  protected void compileClassBytes(byte[] data, String className) {
+    File dexFile = dexClassBytes(data, className, null);
+
+    addDexPathPublic(dexFile);
+  }
+
+  public static File dexClassBytes(byte[] data, String className, File outputDir) {
+    try {
+      if (outputDir == null) {
+        File cacheDir = new File(System.getProperty("java.io.tmpdir"), "dexCache");
+        if (!cacheDir.exists()) cacheDir.mkdirs();
+        outputDir = new File(cacheDir, className + ".zip");
+      }
+
+      D8Command.Builder builder = D8Command.builder();
+      builder.setMinApiLevel(26);
+      builder.setOutput(outputDir.toPath(), OutputMode.DexIndexed);
+      builder.addClassProgramData(data, Origin.root());
+      D8.run(builder.build());
+    } catch (CompilationFailedException e) {
+      throw new GradleException(e.getMessage(), e.getCause());
+    }
+    return outputDir;
   }
 
   public void addDexPathPublic(String path) {
