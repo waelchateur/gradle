@@ -171,5 +171,6 @@ dependencies {
     compileOnly project(path: ':android-stubs')  
             
     // external libs           
-    implementation("com.github.KodTik-Innovations:java-stubs:1.1.0")       
+    implementation("com.github.KodTik-Innovations:java-stubs:1.1.0") 
+    implementation("com.android.tools:r8:8.9.35")
 }

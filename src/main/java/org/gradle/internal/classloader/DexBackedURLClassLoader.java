@@ -1,14 +1,21 @@
 package org.gradle.internal.classloader;
 
+import com.android.tools.r8.CompilationFailedException;
+import com.android.tools.r8.CompilationMode;
+import com.android.tools.r8.D8;
+import com.android.tools.r8.D8Command;
+import com.android.tools.r8.OutputMode;
 import dalvik.system.BaseDexClassLoader;
 import dalvik.system.DexClassLoader;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashSet;
 import java.util.Set;
+import org.gradle.api.GradleException;
 import org.gradle.internal.classpath.ClassPath;
 import org.gradle.internal.hash.HashCode;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +101,28 @@ public class DexBackedURLClassLoader extends DexClassLoader {
     return super.getResource(name);
   }
 
-  protected void compileJar2Dex(String path) {}
+  protected void compileJar(String path) {
+    File jarFile = new File(URI.create(path).getPath());
+    File dexFile = new File(jarFile.getParentFile(), jarFile.getName().replace(".jar", ".zip"));
+
+    dexJar(jarFile, dexFile);
+
+    addDexPathPublic(dexFile);
+  }
+
+  public static void dexJar(File inputJar, File outputDir) {
+    D8Command.Builder builder = D8Command.builder();
+    builder.setMode(CompilationMode.RELEASE);
+    builder.setMinApiLevel(26);
+    builder.addProgramFiles(inputJar.toPath());
+
+    builder.setOutput(outputDir.toPath(), OutputMode.DexIndexed);
+    try {
+      D8.run(builder.build());
+    } catch (CompilationFailedException e) {
+      throw new GradleException(e.getMessage(), e.getCause());
+    }
+  }
 
   public void addDexPathPublic(String path) {
     addDexPathPublic(new File(path));
@@ -102,6 +130,7 @@ public class DexBackedURLClassLoader extends DexClassLoader {
 
   public void addDexPathPublic(File path) {
     try {
+      path.setWritable(false);
       addDexToClasspath(path, this);
     } catch (Exception e) {
       throw new RuntimeException(e);

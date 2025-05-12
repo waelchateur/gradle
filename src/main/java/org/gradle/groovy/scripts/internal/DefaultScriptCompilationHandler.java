@@ -501,7 +501,7 @@ public class DefaultScriptCompilationHandler implements ScriptCompilationHandler
           parent,
           classPath,
           implementationHash);
-      classPath.getAsFiles().forEach(file -> compileJar2Dex(file.getAbsolutePath()));
+      classPath.getAsFiles().forEach(file -> compileJar(file.getAbsolutePath()));
       this.scriptSource = scriptSource;
       this.implementationHash = implementationHash;
     }
