@@ -173,4 +173,5 @@ dependencies {
     // external libs           
     implementation("com.github.KodTik-Innovations:java-stubs:1.1.0") 
     implementation("com.android.tools:r8:8.9.35")
+    implementation("org.apache.commons:commons-lang3:3.14.0")  
 }
