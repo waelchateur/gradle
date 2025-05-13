@@ -180,7 +180,7 @@ public class DexBackedURLClassLoader extends DexClassLoader {
       builder.addClassProgramData(data, Origin.root());
       D8.run(builder.build());
 
-      return Files.list(outputDir.toPath())
+      return Files.list(outputDir.getParentFile().toPath())
           .map(it -> it.toFile().getAbsolutePath())
           .collect(joining(File.pathSeparator));
 

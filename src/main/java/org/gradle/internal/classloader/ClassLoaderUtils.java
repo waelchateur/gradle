@@ -220,16 +220,16 @@ public abstract class ClassLoaderUtils {
 
           List<String> dexPaths = new ArrayList<>();
 
-          File[] dexFiles = cacheDir.listFiles(file -> file.getName().endsWith("_Decorated.zip"));
-
-          if (dexFiles == null) {
-            String paths = DexBackedURLClassLoader.dexClassBytes(classBytes, className);
-            dexPaths.addAll(Arrays.asList(paths.split(File.pathSeparator)));
-          } else {
-            for (File dexFile : dexFiles) {
-              dexPaths.add(dexFile.getAbsolutePath());
-            }
-          }
+          //  File[] dexFiles = cacheDir.listFiles(file -> file.getName().endsWith(".zip"));
+          // File dexZip = new File(cacheDir, className + ".zip");
+          // if (dexFiles == null || !dexZip.exists()   ) {
+          String paths = DexBackedURLClassLoader.dexClassBytes(classBytes, className);
+          dexPaths.addAll(Arrays.asList(paths.split(File.pathSeparator)));
+          // } else {
+          //   for (File dexFile : dexFiles) {
+          //    dexPaths.add(dexFile.getAbsolutePath());
+          //   }
+          // }
 
           for (String path : dexPaths) {
             new DexBackedURLClassLoader().addDexPathPublic(path, classLoader);
